@@ -26,6 +26,11 @@ class Common extends Controller{
                 'user_name' =>['require','chsDash','max'=>20,],
                 'user_pwd'=>'require|length:32'
             ),
+            'register'=>array(
+                'user_name' =>['require'],
+                'user_pwd'=>'require|length:32',
+                'code' => 'require|number|length:6'
+            ),
         ),
         'Code'=>array(
             'get_code'=>array(
@@ -144,5 +149,25 @@ class Common extends Controller{
                 }
                 break;
         }
+    }
+
+    public function check_code($user_name,$code){
+        $last_time = session($user_name,'_last_send_time');
+        if(!$last_time){
+            $last_time = time();
+        }
+        if(time()-$last_time > 60){
+            $this->return_msg(400,'验证超时，请在一分钟内验证!');
+        }
+        dump(session($user_name.'_code'));//die;
+
+        $md5_code = md5($user_name.'_'.md5($code));
+
+        /*
+        if(session($user_name."_code") !== $md5_code){
+            $this->return_msg(400,'验证码不正确');
+        }
+        */
+        session($user_name.'_code',null);
     }
 }

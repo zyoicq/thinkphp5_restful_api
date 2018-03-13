@@ -51,10 +51,10 @@ class Code extends Common {
 
         $code = $this->make_code(6);
 
-        $md5_code = md5($username,'_'+ md5($code));
+        $md5_code = md5($username.'_'.md5($code));
 
-        session($username,'code',$md5_code);
-        session($username,'last_send_time',strtotime(time()));
+        session($username,'_code',$md5_code);
+        session($username,'_last_send_time',strtotime(time()));
 
         if ($type == 'phone'){
             $this->send_code_to_phone($username,$code);
