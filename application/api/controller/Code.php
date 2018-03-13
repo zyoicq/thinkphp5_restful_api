@@ -57,7 +57,7 @@ class Code extends Common {
         session($username,'last_send_time',strtotime(time()));
 
         if ($type == 'phone'){
-            $this->send_code_to_phone($username,$md5_code);
+            $this->send_code_to_phone($username,$code);
         }else{
             $this->send_code_to_email($username,$md5_code);
         }
@@ -69,8 +69,28 @@ class Code extends Common {
         return rand($min,$max);
     }
 
-    public function send_code_to_phone($username,$exist){
-        echo 'send_code_to_phone';
+    public function send_code_to_phone($phone,$code){
+        $curl = curl_init();
+        curl_setopt($curl,CURLOPT_URL,'https://api.mysubmail.com/message/xsend');
+        curl_setopt($curl,CURLOPT_HEADER,0);
+        curl_setopt($curl,CURLOPT_RETURNTRANSFER,1);
+        curl_setopt($curl,CURLOPT_POST,1);
+
+        $arr = array('code' => $code, 'time' =>60);
+        //echo json_encode($arr);
+        $data = [
+            'appid' => '20717',
+            'to'    => $phone,
+            'project'=> 'cZfFF',
+            'vars' => (string)json_encode($arr),
+            'signature' => '79b5bc3af28c2ea480cc0717d3addbe4',
+        ];
+        curl_setopt($curl,CURLOPT_POSTFIELDS,$data);
+        $res = curl_exec($curl);
+        dump(curl_error($curl));
+        curl_close($curl);
+        dump($res);die;
+        //echo 'send_code_to_phone';
     }
 
     public function send_code_to_email($email, $code)
@@ -91,13 +111,6 @@ class Code extends Common {
         $mail->addReplyTo('zy123zhangyong@163.com', 'Reply');
         $mail->Subject = "您有新的验证码!";
 
-        $mail->Body = '这是一个测试邮件，您的验证码是$code.验证码的有效期为1分钟.本邮件请勿回复!';
-
-        if (!$mail->send()) {
-            $this->return_msg(400, $mail->ErrorInfo);
-        } else {
-            $this->return_msg(200, '验证码已经发送成功，请注意查收！');
-        }
-    }
-
+        $mail->Body = '这是一个测试邮件，您的验证码是$code.验证码的有效期为1分钟.本邮件请勿回复!'; if (!$mail->send()) {
+            $this->return_msg(400, $mail->ErrorInfo); } else { $this->return_msg(200, '验证码已经发送成功，请注意查收！'); } }
 }
