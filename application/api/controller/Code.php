@@ -8,7 +8,7 @@
 
 namespace app\api\controller;
 use phpmailer\phpmailer;
-
+use submail\messagexsend;
 
 use think\log;
 
@@ -69,6 +69,7 @@ class Code extends Common {
         return rand($min,$max);
     }
 
+    /*
     public function send_code_to_phone($phone,$code){
         $curl = curl_init();
         curl_setopt($curl,CURLOPT_URL,'https://api.mysubmail.com/message/xsend');
@@ -76,21 +77,48 @@ class Code extends Common {
         curl_setopt($curl,CURLOPT_RETURNTRANSFER,1);
         curl_setopt($curl,CURLOPT_POST,1);
 
-        $arr = array('code' => $code, 'time' =>60);
+        //$arr = array('code' => $code, 'time' =>60);
         //echo json_encode($arr);
         $data = [
             'appid' => '20717',
             'to'    => $phone,
             'project'=> 'cZfFF',
-            'vars' => (string)json_encode($arr),
+            //'vars' => (string)json_encode($arr),
+            'vars' => '{"code":'.$code.',"time":"60"}',
             'signature' => '79b5bc3af28c2ea480cc0717d3addbe4',
         ];
         curl_setopt($curl,CURLOPT_POSTFIELDS,$data);
         $res = curl_exec($curl);
-        dump(curl_error($curl));
         curl_close($curl);
+        $res = json_decode($res);
+        //dump($res);die;
+        if ($res['status'] != 'success'){
+            $this->return_msg(400,$res->msg);
+        }else{
+            $this->return_msg(200,'手机验证码已发送，每天发送5次，请在一分钟内验证！');
+        }
         dump($res);die;
         //echo 'send_code_to_phone';
+    }
+    */
+    /**
+     * 向手机号发送验证码(使用SDK)
+     * @param  [string] $phone [手机号]
+     * @param  [int] $code  [生成的验证码]
+     * @return [json]        [返回的json信息]
+     */
+    public function send_code_to_phone($phone, $code) {
+        $submail = new MESSAGEXsend();
+        $submail->SetTo($phone);
+        $submail->SetProject('cZfFF');
+        $submail->AddVar('code', $code);
+        $submail->AddVar('time', 60);
+        $xsend = $submail->xsend();
+        if ($xsend['status'] !== 'success') {
+            $this->return_msg(400, $xsend['msg']);
+        } else {
+            $this->return_msg(200, '手机验证码已发送, 每天发送5次, 请在一分钟内验证!');
+        }
     }
 
     public function send_code_to_email($email, $code)
