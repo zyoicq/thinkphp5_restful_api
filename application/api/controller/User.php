@@ -12,8 +12,35 @@ use think\Log;
 class User extends Common {
     public function login(){
         $data = $this->params;
-        dump($data);
+
+        //检测用户名类型
+        $user_name_type = $this->check_username($data['user_name']);
+        switch ($user_name_type){
+            case 'phone':
+                $this->check_exist($data['user_name'],'phone',1);
+                $db_res = db('user')
+                    ->field('user_id,user_name,user_phone,user_email,user_rtime,user_pwd')
+                    ->where('user_phone',$data['user_name'])
+                    ->find();
+                break;
+            case 'email':
+                $this->check_exist($data['user_name'],'email',1);
+                $db_res = db('user')
+                    ->field('user_id,user_name,user_phone,user_email,user_rtime,user_pwd')
+                    ->where('user_phone',$data['user_name'])
+                    ->find();
+                break;
+        }
+        if($db_res['user_pwd'] !== $data['user_pwd']){
+            $this->return_msg(400,'用户名或者密码不正确!');
+        }else{
+            unset($db_res['user_pwd']);// 密码永不返回
+            $this->return_msg(200,'登录成功！',$db_res);
+        }
+
+        //dump($data);
         //echo 'welcome to function login!';
+        //echo 'login';
     }
 
     public function register(){

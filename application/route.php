@@ -23,6 +23,9 @@ Route::post('user','user/login');
 Route::get('code/:time/:token/:username/:is_exist','code/get_code');
 
 Route::post('user/register','user/register');
+
+Route::post('user/login','user/login');
+
 return [
     '__pattern__' => [
         'name' => '\w+',

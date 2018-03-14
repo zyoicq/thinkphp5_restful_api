@@ -23,7 +23,7 @@ class Common extends Controller{
     protected $rules = array(
         'User'=>array(
             'login'=>array(
-                'user_name' =>['require','chsDash','max'=>20,],
+                'user_name' => 'require',
                 'user_pwd'=>'require|length:32'
             ),
             'register'=>array(
