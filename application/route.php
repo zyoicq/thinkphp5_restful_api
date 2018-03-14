@@ -28,6 +28,7 @@ Route::post('user/login','user/login');
 
 Route::post('user/icon','user/upload_head_img');
 
+Route::post('user/change_pwd','user/change_pwd');
 return [
     '__pattern__' => [
         'name' => '\w+',
