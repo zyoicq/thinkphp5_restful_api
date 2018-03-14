@@ -11,8 +11,10 @@ namespace app\api\controller;
 use think\Request;
 use think\Db;
 use think\Controller;
+use think\Image;
 use think\Validate;
 use think\log;
+
 
 
 class Common extends Controller{
@@ -31,6 +33,10 @@ class Common extends Controller{
                 'user_pwd'=>'require|length:32',
                 'code' => 'require|number|length:6'
             ),
+            'upload_head_img' => array(
+                'user_id'=> 'require|number',
+                'user_icon' => 'require|image|fileSize:2000000|fileExt:jpg,png,bmp,jpeg'
+            ),
         ),
         'Code'=>array(
             'get_code'=>array(
@@ -47,7 +53,8 @@ class Common extends Controller{
         //$this->check_time($this->request->only(['time']));
         //$this->check_token($this->request->param());
         //$this->params = $this->check_prarams($this->request->except(['time','token']));
-        $this->params = $this->request->param();
+        //$this->params = $this->request->param();
+        $this->params = $this->check_prarams($this->request->param(true));
     }
 
     public function check_time($arr)
@@ -169,5 +176,30 @@ class Common extends Controller{
         }
         */
         session($user_name.'_code',null);
+    }
+
+    public function upload_file($file,$type=''){
+        $info = $file->move(ROOT_PATH.'public'.DS.'uploads');
+        if($info){
+            //dump($info->getSaveName());die;
+            $path = '/uploads/'.$info->getSaveName();
+            if(!empty($type)){
+                $this->image_edit($path,$type);
+            }
+            return str_replace('\\','/',$path);
+        }else{
+            $this->return_msg(400,$file->getError());
+        }
+    }
+
+    public function image_edit($path,$type){
+        //dump(ROOT_PATH.'public'.$path);die;
+
+        $image = Image::open(ROOT_PATH.'public'.$path);
+        switch ($type){
+            case 'head_img':
+                $image->thumb(200,200,Image::THUMB_CENTER)->save(ROOT_PATH.'public'.$path);
+                break;
+        }
     }
 }

@@ -26,6 +26,8 @@ Route::post('user/register','user/register');
 
 Route::post('user/login','user/login');
 
+Route::post('user/icon','user/upload_head_img');
+
 return [
     '__pattern__' => [
         'name' => '\w+',

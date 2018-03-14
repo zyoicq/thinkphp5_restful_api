@@ -73,5 +73,19 @@ class User extends Common {
 
     }
 
+    public function upload_head_img(){
+        //echo "upload head img";
+        //接受参数
+        $data = $this->params;
+        $head_img_path = $this->upload_file($data['user_icon'],'head_img');
+        //dump($head_img_path);die;
+        // 存入数据库
+        $res = db('user')->where('user_id',$data['user_id'])->setField('user_icon',$head_img_path);
+        if ($res){
 
+            $this->return_msg(200,'头像上传成功！',$head_img_path);
+        }else{
+            $this->return_msg(400,'上传头像失败!');
+        }
+    }
 }
