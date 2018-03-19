@@ -40,6 +40,10 @@ Route::post('user/bind_username','user/bind_username');
 
 Route::post('user/nickname','user/set_nickname');
 
+/** article */
+//新增文章
+Route::post('article','article/add_article');
+
 return [
     '__pattern__' => [
         'name' => '\w+',
