@@ -42,6 +42,11 @@ class Common extends Controller{
                 'user_ini_pwd'=>'require|length:32',
                 'user_pwd' => 'require|length:32'
             ),
+            'find_pwd'=>array(
+                'user_name' =>['require'],
+                'user_pwd'=>'require|length:32',
+                'code' => 'require|number|length:6'
+            ),
         ),
         'Code'=>array(
             'get_code'=>array(

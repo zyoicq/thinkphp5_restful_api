@@ -122,4 +122,27 @@ class User extends Common {
             $this->return_msg(400,'密码修改失改!');
         }
     }
+
+    public function find_pwd(){
+       //echo 'find pwd';
+        $data = $this->params;
+        //$this->check_code($data['user_name'],$data['code']);
+        $user_name_type = $this->check_username($data['user_name']);
+        switch ($user_name_type){
+            case 'phone':
+               $this->check_exist($data['user_name'],'phone',1);
+               $where['user_phone'] = $data['user_name'];
+               break;
+            case 'email':
+                $this->check_exist($data['user_name'],'email',1);
+                $where['user_email'] = $data['user_name'];
+                break;
+        }
+        $res = db('user')->where($where)->setField('user_pwd',$data['user_pwd']);
+        if($res !== false){
+            $this->return_msg(200,'密码修改成功!');
+        }else{
+            $this->return_msg(400,'密码修改失败!');
+        }
+    }
 }
