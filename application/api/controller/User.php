@@ -145,4 +145,69 @@ class User extends Common {
             $this->return_msg(400,'密码修改失败!');
         }
     }
+
+    public function bind_phone(){
+       //echo "bind_phone" ;
+        /*
+         * 1.接收参数
+         * 2.检查验证码
+         * 3.修改数据库
+         */
+
+        $data = $this->params;
+        //$this->check_code($data['phone'],$data['code']);
+        $res = db('user')->where('user_id',$data['user_id'])->setField('user_phone',$data['phone']);
+        if($res !== false){
+            $this->return_msg(200,'手机号绑定成功!');
+        }else{
+            $this->return_msg(400,'手机号绑定失败!');
+        }
+    }
+
+    public function bind_email(){
+        //echo "bind_email" ;
+        /*
+         * 1.接收参数
+         * 2.检查验证码
+         * 3.修改数据库
+         */
+
+        $data = $this->params;
+        //$this->check_code($data['phone'],$data['code']);
+        $res = db('user')->where('user_id',$data['user_id'])->setField('user_email',$data['email']);
+        if($res !== false){
+            $this->return_msg(200,'邮箱绑定成功!');
+        }else{
+            $this->return_msg(400,'邮箱绑定失败!');
+        }
+    }
+
+    public function bind_username(){
+       //echo 'bind_username';
+        /*
+         * 接收参数
+         */
+        $data = $this->params;
+
+        //********* 检测验证码
+        //$this->check_code($data['user_name'],$data['code']);
+        $user_name_type = $this->check_username($data['user_name']);
+        switch ($user_name_type){
+            case 'phone':
+                $type_text = '手机';
+                $update_data['user_phone'] = $data['user_name'];
+                break;
+            case 'email':
+                $type_text = '邮箱';
+                $update_data['user_email'] = $data['user_name'];
+                break;
+        }
+        $res = db('user')->where('user_id',$data['user_id'])->update($update_data);
+        if ($res !== false){
+            $this->return_msg(200,$type_text.'绑定成功!');
+        }else{
+            $this->return_msg(400,'绑定失败!');
+        }
+
+    }
 }

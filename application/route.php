@@ -32,6 +32,11 @@ Route::post('user/change_pwd','user/change_pwd');
 
 Route::post('user/find_pwd','user/find_pwd');
 
+Route::post('user/bind_phone','user/bind_phone');
+
+Route::post('user/bind_email','user/bind_email');
+
+Route::post('user/bind_username','user/bind_username');
 return [
     '__pattern__' => [
         'name' => '\w+',

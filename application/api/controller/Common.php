@@ -47,6 +47,21 @@ class Common extends Controller{
                 'user_pwd'=>'require|length:32',
                 'code' => 'require|number|length:6'
             ),
+            'bind_phone'=>array(
+                'user_id' =>'require|number',
+                'phone'=> ['require','regex' => '/^1[3456789]\d{9}$/'],
+                'code' => 'require|number|length:6'
+            ),
+            'bind_email'=>array(
+                'user_id' =>'require|number',
+                'email'=> 'require|email',
+                'code' => 'require|number|length:6'
+            ),
+            'bind_username'=>array(
+                'user_id' =>'require|number',
+                'user_name'=> 'require',
+                'code' => 'require|number|length:6'
+            ),
         ),
         'Code'=>array(
             'get_code'=>array(
