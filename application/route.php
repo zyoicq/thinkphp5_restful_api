@@ -37,6 +37,9 @@ Route::post('user/bind_phone','user/bind_phone');
 Route::post('user/bind_email','user/bind_email');
 
 Route::post('user/bind_username','user/bind_username');
+
+Route::post('user/nickname','user/set_nickname');
+
 return [
     '__pattern__' => [
         'name' => '\w+',

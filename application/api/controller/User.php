@@ -210,4 +210,24 @@ class User extends Common {
         }
 
     }
+
+    public function set_nickname(){
+        //echo 'set nockname';
+        /** 接收参数 */
+        $data =  $this->params;
+
+        /** 检测昵称 */
+        $res = db('user')->where('user_nickname',$data['user_nickname'])->find();
+        if ($res){
+            $this->return_msg(400,'该昵称已被占用!');
+        }
+
+        $res = db('user')->where('user_id',$data['user_id'])->setField('user_nickname',$data['user_nickname']);
+        if(!$res){
+            $this->return_msg(400,'修改昵称失败!');
+        }else{
+            $this->return_msg(200,'昵称修改成功!');
+        }
+
+    }
 }

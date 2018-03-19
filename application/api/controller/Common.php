@@ -62,6 +62,10 @@ class Common extends Controller{
                 'user_name'=> 'require',
                 'code' => 'require|number|length:6'
             ),
+            'set_nickname'=>array(
+                'user_id' =>'require|number',
+                'user_nickname'=> 'require|chsDash',
+            ),
         ),
         'Code'=>array(
             'get_code'=>array(
