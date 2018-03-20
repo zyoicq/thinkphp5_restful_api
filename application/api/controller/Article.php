@@ -23,4 +23,37 @@ class Article extends Common{
        }
     }
 
+    public function article_list(){
+        //echo 'article list';
+        /** 接收参数 */
+        $data = $this->params;
+        if(!isset($data['num'])){
+            $data['num'] = 10;
+        }
+
+        if(!isset($data['page'])){
+            $data['page'] = 1;
+        }
+
+        /** 查询数据库 */
+        $where['article_uid'] = $data['user_id'];
+        $count = db('article')->where($where)->count();
+        $page_num = ceil($count/$data['num']);
+        $field = "article_id,article_ctime,article_title,user_nickname";
+        $join = [['api_user u','u.user_id = a.article_uid']];
+        $res = db('article')->alias('a')->field($field)->join($join)->where($where)->page($data['page'],$data['num'])->select();
+
+        //判断并输出
+        if($res === false){
+            $this->return_msg(400,'查询失败!');
+        }elseif (empty($res)){
+            $this->return_msg(200,'暂无数据!');
+        }else{
+            $return_data['articles'] = $res;
+            $return_data['page_num'] = $page_num;
+            $this->return_msg(200,'查询成功!',$return_data);
+        }
+
+    }
+
 }

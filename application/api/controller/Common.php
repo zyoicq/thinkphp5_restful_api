@@ -77,7 +77,12 @@ class Common extends Controller{
             'add_article'=>array(
                 'article_uid'=>'require|number',
                 'article_title'=>'require|chsDash',
-            )
+            ),
+            'article_list'=>array(
+                'user_id'=>'require|number',
+                'num'=>'number',
+                'page'=>'number',
+            ),
         )
     );
 

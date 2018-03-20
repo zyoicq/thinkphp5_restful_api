@@ -44,6 +44,11 @@ Route::post('user/nickname','user/set_nickname');
 //新增文章
 Route::post('article','article/add_article');
 
+//查看文章列表
+Route::get('articles/:time/:token/:user_id/[:num]/[:page]','article/article_list');
+
+
+
 return [
     '__pattern__' => [
         'name' => '\w+',
