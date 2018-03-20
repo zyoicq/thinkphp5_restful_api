@@ -39,6 +39,7 @@ class Article extends Common{
 
         /** 查询数据库 */
         $where['article_uid'] = $data['user_id'];
+        $where['article_isdel'] = 0;
         $count = db('article')->where($where)->count();
         $page_num = ceil($count/$data['num']);
         $field = "article_id,article_ctime,article_title,user_nickname";
@@ -90,4 +91,21 @@ class Article extends Common{
 
     }
 
+    public function del_article(){
+        //echo "delete article.";
+        /** 接收参数 */
+
+        $data = $this->params;
+
+        /** 删除数据 逻辑删除 */
+        $res = db('article')->where('article_id',$data['article_id'])->setField('article_isdel',1);
+        /** 删除数据 物理删除 */
+        //$res = db('article')->delete($data['article_id']);
+
+        if($res){
+            $this->return_msg(200,'删除文章成功!');
+        }else{
+            $this->return_msg(400,'删除文章失败!');
+        }
+    }
 }

@@ -90,6 +90,9 @@ class Common extends Controller{
                 'article_id'=>'require|number',
                 'article_title'=>'chsDash',
             ),
+            'del_article'=>array(
+                'article_id'=>'require|number',
+            ),
         )
     );
 

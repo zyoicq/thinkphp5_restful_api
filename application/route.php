@@ -53,6 +53,8 @@ Route::get('article/:time/:token/:article_id','article/article_detail');
 //修改/更新文章列表
 Route::put('article','article/update_article');
 
+//删除文章
+Route::delete('article/:time/:token/:article_id','article/del_article');
 
 return [
     '__pattern__' => [
