@@ -9,6 +9,8 @@
 namespace app\api\controller;
 
 
+use traits\think\Instance;
+
 class Article extends Common{
     public function add_article(){
        //echo 'add article.';
@@ -54,6 +56,23 @@ class Article extends Common{
             $this->return_msg(200,'查询成功!',$return_data);
         }
 
+    }
+    public function article_detail(){
+        //echo 'article detail';
+        /** 接收参数*/
+        $data = $this->params;
+        /** 查询数据库*/
+       $field = 'article_id,article_title,article_ctime,article_content,user_nickname';
+       $where['article_id'] = $data['article_id'];
+       $join = [['api_user u','u.user_id = a.article_uid']];
+       $res = db('article')->alias('a')->join($join)->field($field)->where($where)->find();
+
+       $res['article_content']= htmlspecialchars_decode($res['article_content']);
+       if(!$res){
+           $this->return_msg(400,'查询失败!');
+       }else{
+           $this->return_msg(200,'获取成功!',$res);
+       }
     }
 
 }

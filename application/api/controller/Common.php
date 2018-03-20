@@ -83,6 +83,9 @@ class Common extends Controller{
                 'num'=>'number',
                 'page'=>'number',
             ),
+            'article_detail'=>array(
+                'article_id'=>'require|number',
+            ),
         )
     );
 
