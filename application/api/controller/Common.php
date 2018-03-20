@@ -86,6 +86,10 @@ class Common extends Controller{
             'article_detail'=>array(
                 'article_id'=>'require|number',
             ),
+            'update_article'=>array(
+                'article_id'=>'require|number',
+                'article_title'=>'chsDash',
+            ),
         )
     );
 

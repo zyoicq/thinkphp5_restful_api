@@ -47,9 +47,11 @@ Route::post('article','article/add_article');
 //查看文章列表
 Route::get('articles/:time/:token/:user_id/[:num]/[:page]','article/article_list');
 
-//查看文章列表
+//查看文章信息
 Route::get('article/:time/:token/:article_id','article/article_detail');
 
+//修改/更新文章列表
+Route::put('article','article/update_article');
 
 
 return [
